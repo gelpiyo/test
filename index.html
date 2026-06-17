@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="description" content="ゲルぴよバウンス - ぷにぷにゲルぴよを引っ張って飛ばす物理パズルアクション！">
+  <meta name="theme-color" content="#1a1a2e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>ゲルぴよバウンス 🐤💥</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="game-container">
+    <canvas id="game-canvas"></canvas>
+    <!-- UI Overlay -->
+    <div id="ui-overlay">
+      <!-- タイトル画面 -->
+      <div id="title-screen" class="screen active">
+        <div class="title-logo">
+          <h1 class="title-text">ゲルぴよ<br><span class="title-bounce">バウンス</span></h1>
+          <div class="title-subtitle">🐤 ぷにぷにアクション 💥</div>
+        </div>
+        <!-- エンドレスハイスコア表示枚 -->
+        <div id="title-best-score" class="title-best-score" style="display: none;">
+          <div class="title-best-label">🔥 エンドレス最高記録</div>
+          <div class="title-best-values">
+            <span class="title-best-item">スコア: <strong id="title-best-score-val">0</strong></span>
+            <span class="title-best-item">WAVE: <strong id="title-best-wave-val">0</strong></span>
+          </div>
+        </div>
+        <button id="btn-endless-main" class="btn-primary btn-endless-main">🔥 エンドレスに挑戦！</button>
+        <button id="btn-start" class="btn-secondary">🔰 トレーニング（5ステージ）</button>
+        <button id="btn-how-to" class="btn-secondary">あそびかた</button>
+        <div class="title-footer">
+          <button id="btn-sound-toggle" class="btn-icon" aria-label="サウンド切替">🔊</button>
+        </div>
+      </div>
+
+      <!-- あそびかた画面 -->
+      <div id="howto-screen" class="screen">
+        <div class="glass-panel howto-panel">
+          <h2>あそびかた</h2>
+          <div class="howto-steps">
+            <div class="howto-step">
+              <div class="howto-icon">👆</div>
+              <p>ゲルぴよを<strong>指で引っ張って</strong>離すと飛んでいくよ！</p>
+            </div>
+            <div class="howto-step">
+              <div class="howto-icon">💥</div>
+              <p>障害物にぶつかると<strong>ぼよんぼよん跳ね返る</strong>！</p>
+            </div>
+            <div class="howto-step">
+              <div class="howto-icon">⭐</div>
+              <p>すべての<strong>ワルぴよ</strong>を倒せばクリア！</p>
+            </div>
+          </div>
+          <button id="btn-howto-back" class="btn-secondary">もどる</button>
+        </div>
+      </div>
+
+      <div id="stage-select-screen" class="screen">
+        <div class="glass-panel stage-panel">
+          <h2>ステージせんたく</h2>
+          <div id="stage-grid" class="stage-grid"></div>
+          <button id="btn-endless" class="btn-primary btn-endless">🔥 エンドレスモード</button>
+          <button id="btn-stage-back" class="btn-secondary">もどる</button>
+        </div>
+      </div>
+
+      <div id="game-hud" class="screen">
+        <div class="hud-top">
+          <div class="hud-score">
+            <span class="hud-label">スコア</span>
+            <span id="hud-score-value" class="hud-value">0</span>
+          </div>
+          <div id="hud-wave-display" class="hud-wave" style="display: none;">
+            <span class="hud-label">WAVE</span>
+            <span id="hud-wave-value" class="hud-value hud-wave-value">1</span>
+          </div>
+          <div class="hud-piyo-count">
+            <span class="hud-label">のこり</span>
+            <span id="hud-piyo-icons" class="hud-piyo-icons"></span>
+          </div>
+          <button id="btn-pause" class="btn-icon">⏸️</button>
+        </div>
+      </div>
+
+      <!-- ポーズ画面 -->
+      <div id="pause-screen" class="screen">
+        <div class="glass-panel pause-panel">
+          <h2>ポーズ</h2>
+          <button id="btn-resume" class="btn-primary">つづける</button>
+          <button id="btn-retry-pause" class="btn-secondary">やりなおす</button>
+          <button id="btn-quit" class="btn-secondary">ステージ選択へ</button>
+        </div>
+      </div>
+
+      <!-- リザルト画面 -->
+      <div id="result-screen" class="screen">
+        <div class="glass-panel result-panel">
+          <h2 id="result-title"></h2>
+          <div id="result-stars" class="result-stars"></div>
+          <div id="result-wave" class="result-wave" style="display: none;">
+            <span>WAVE: </span><span id="result-wave-value">0</span>
+          </div>
+          <div class="result-score">
+            <span>スコア: </span><span id="result-score-value">0</span>
+          </div>
+          <div class="result-buttons">
+            <button id="btn-retry" class="btn-secondary">やりなおす</button>
+            <button id="btn-next" class="btn-primary">つぎへ</button>
+            <button id="btn-to-stages" class="btn-secondary">ステージ選択</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
